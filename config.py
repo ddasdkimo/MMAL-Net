@@ -5,12 +5,12 @@ import numpy as np
 CUDA_VISIBLE_DEVICES = '0'  # The current version only supports one GPU training
 
 
-set = 'CAR'  # Different dataset with different
+set = 'RaiFit'  # Different dataset with different
 model_name = ''
 
-batch_size = 6
+batch_size = 10
 vis_num = batch_size  # The number of visualized images in tensorboard
-eval_trainset = False  # Whether or not evaluate trainset
+eval_trainset = True  # Whether or not evaluate trainset
 save_interval = 1
 max_checkpoint_num = 200
 end_epoch = 200
@@ -55,6 +55,10 @@ else:
         model_path = './checkpoint/aircraft'      # pth save path
         root = './datasets/FGVC-aircraft'  # dataset path
         num_classes = 100
+    elif set == 'RaiFit':
+        model_path = './checkpoint/RaiFit31+42'      # pth save path
+        root = './datasets/RaiFit31+42'  # dataset path
+        num_classes = 73
 
 
 '''indice2coordinates'''
