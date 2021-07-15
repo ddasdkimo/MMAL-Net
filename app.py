@@ -62,12 +62,12 @@ def main():
         model = model.cuda()  # 部署在GPU
         model.eval()
 
-    image = loadImage("datasets/RaiFit/images/29-2729859.jpg")
-    if CUDA_VISIBLE_DEVICES != 'CPU':
-        image = image.cuda()
-    with torch.no_grad():
-        probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
-        print(classes[str(int(indices[0])+1)])
+    # image = loadImage("datasets/RaiFit/images/29-2729859.jpg")
+    # if CUDA_VISIBLE_DEVICES != 'CPU':
+    #     image = image.cuda()
+    # with torch.no_grad():
+    #     probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
+    #     print(classes[str(int(indices[0])+1)])
 
 
 @app.route("/detect", methods=['POST'])
