@@ -106,10 +106,15 @@ class MainNet(nn.Module):
                                                 mode='bilinear', align_corners=True)  # [N, 3, 224, 224]
         local_fm, local_embeddings, _ = self.pretrained_model(local_imgs.detach())  # [N, 2048]
         local_logits = self.rawcls_net(local_embeddings)  # [N, 200]
-
+        if status == "inference":
+            output = local_logits.squeeze()
+            sorted, indices = torch.sort(output, descending=True)
+            probs = F.softmax(output, dim=-1)
+            return probs,indices
+            
         proposalN_indices, proposalN_windows_scores, window_scores \
             = self.APPM(self.proposalN, local_fm.detach(), ratios, window_nums_sum, N_list, iou_threshs, DEVICE)
-
+        
         if status == "train":
             # window_imgs cls
             window_imgs = torch.zeros([batch_size, self.proposalN, 3, 224, 224]).to(DEVICE)  # [N, 4, 3, 224, 224]
