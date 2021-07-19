@@ -7,8 +7,8 @@ CUDA_VISIBLE_DEVICES = '0'  # The current version only supports one GPU training
 TMPFILE = "/dev/shm/"
 FLASK_SECRET_KEY = "asjdfliajsdoivj$%^&*("
 set = 'RaiFit'  # Different dataset with different
-model_name = 'epoch19.pth'
-# model_name = ''
+# model_name = 'epoch34.pth'
+model_name = ''
 batch_size = 10
 vis_num = batch_size  # The number of visualized images in tensorboard
 eval_trainset = True  # Whether or not evaluate trainset
@@ -57,9 +57,9 @@ else:
         root = './datasets/FGVC-aircraft'  # dataset path
         num_classes = 100
     elif set == 'RaiFit':
-        model_path = './checkpoint/RaiFit'      # pth save path
-        root = './datasets/RaiFit'  # dataset path
-        num_classes = 31
+        model_path = './checkpoint/mmal_fruit'      # pth save path
+        root = '../datasets/mmal_fruit'  # dataset path
+        num_classes = 262
 
 
 '''indice2coordinates'''
