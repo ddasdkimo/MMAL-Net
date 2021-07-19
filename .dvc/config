@@ -2,3 +2,7 @@
     dir = /home/shared/dvc-cache
     shared = group
     type = symlink
+[core]
+    remote = upstream
+['remote "upstream"']
+    url = /home/shared/dvc-cache
