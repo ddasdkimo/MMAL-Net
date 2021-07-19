@@ -12,6 +12,10 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 import json
+import time
+from jinja2 import Markup
+from pyecharts.charts import Bar
+from pyecharts import options as opts
 
 from config import num_classes, model_name, model_path, lr_milestones, lr_decay_rate, input_size, \
     root, end_epoch, save_interval, init_lr, batch_size, CUDA_VISIBLE_DEVICES, weight_decay, \
@@ -68,7 +72,48 @@ def main():
     # with torch.no_grad():
     #     probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
     #     print(classes[str(int(indices[0])+1)])
+def bar_base(name,p) -> Bar:
+    c = (
+        Bar()
+        .add_xaxis(name)
+        .add_yaxis("水果", p)
+        # .add_yaxis("商家B", [15, 25, 16, 55, 48, 8])
+        .set_global_opts(title_opts=opts.TitleOpts(title="水果比例", subtitle="圖片可能存在的水果"))
+    )
+    return c
 
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['file']
+        print(request.files)
+        f.save(TMPFILE + f.filename)
+        image = loadImage(TMPFILE + f.filename)
+        if CUDA_VISIBLE_DEVICES != 'CPU':
+            image = image.cuda()
+        with torch.no_grad():
+            probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
+            # print(classes[str(int(indices[0])+1)])
+        try:
+            os.remove(TMPFILE + f.filename)
+        except OSError as e:
+            print(e)
+        probslist = probs.tolist()
+        indicesList = [i + 1 for i in indices.tolist()]
+        print(classes[str(indicesList[0])])
+        if(probslist[indicesList[0]-1] < 0.2):
+            return "未找到"
+        name = []
+        p = []
+        for i in range(5):
+            name.append(classes[str(indicesList[i])])
+            p.append(round(probslist[indicesList[i]-1],2))
+        
+        c = bar_base(name,p)
+        
+        return Markup(c.render_embed())
+    else:
+        return render_template('upload.html')
 
 @app.route("/detect", methods=['POST'])
 def detect():
