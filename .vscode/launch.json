@@ -27,6 +27,20 @@
             "request": "launch",
             "program": "train.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "test",
+            "type": "python",
+            "request": "launch",
+            "program": "test.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "toMMALData",
+            "type": "python",
+            "request": "launch",
+            "program": "toMMALByOne.py",
+            "console": "integratedTerminal"
         }
     ]
 }

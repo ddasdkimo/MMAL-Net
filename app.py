@@ -13,6 +13,8 @@ from PIL import Image
 from torchvision import transforms
 import json
 
+from werkzeug.datastructures import Range
+
 from config import num_classes, model_name, model_path, lr_milestones, lr_decay_rate, input_size, \
     root, end_epoch, save_interval, init_lr, batch_size, CUDA_VISIBLE_DEVICES, weight_decay, \
     proposalN, set, channels, FLASK_SECRET_KEY, TMPFILE
@@ -70,6 +72,56 @@ def main():
     #     print(classes[str(int(indices[0])+1)])
 
 
+@app.route("/detects", methods=['POST'])
+def detects():
+    global model, classes, filecount, device
+    imagelist = []
+    namelist = []
+    files = request.files
+    for fileitem in files:
+        img = request.files.get(fileitem)
+        fileName = str(filecount)
+        filecount = filecount+1
+        if not os.path.isdir(TMPFILE+"photo/"):
+            os.mkdir(TMPFILE+"photo/")
+        filename = TMPFILE+"photo/"+fileName+".jpg"
+        img.save(filename)
+        imagetmp = loadImage(filename)
+        namelist.append(fileitem)
+        try:
+            os.remove(filename)
+        except OSError as e:
+            print(e)
+        if CUDA_VISIBLE_DEVICES != 'CPU':
+            imagetmp = imagetmp.cuda()
+        imagelist.append(imagetmp)
+
+    with torch.no_grad():
+        imagetmp = torch.cat(imagelist, 0)
+        stime = time.time()
+        probs, indices = model(
+            imagetmp, 0, 0, status='inference', DEVICE=device)
+        print("推論時間:"+str(time.time()-stime))
+        # print(classes[str(int(indices[0])+1)])
+
+    data = []
+    if len(probs.size()) == 1:
+        probslist = probs.tolist()
+        indicesList = [i + 1 for i in indices.tolist()]
+        print(classes[str(indicesList[0])])
+        data = [{"probs": [round(i, 2) for i in probslist],
+                 "indices":indicesList, "classes":classes, "top": classes[str(indicesList[0])]}]
+
+    elif len(probs.size()) == 2:
+        for i in range(len(probs)):
+            probslist = probs[i].tolist()
+            indicesList = [i + 1 for i in indices[i].tolist()]
+            print(classes[str(indicesList[0])])
+            data.append({"probs": [round(i, 2) for i in probslist], "indices": indicesList,
+                        "classes": classes, "name": namelist[i], "top": classes[str(indicesList[0])]})
+    return jsonify(data)
+
+
 @app.route("/detect", methods=['POST'])
 def detect():
     global model, classes, filecount, device
@@ -94,8 +146,10 @@ def detect():
     probslist = probs.tolist()
     indicesList = [i + 1 for i in indices.tolist()]
     print(classes[str(indicesList[0])])
-    data = {"probs":[round(i,2) for i in probslist],"indices":indicesList,"classes":classes}
+    data = {"probs": [round(i, 2) for i in probslist],
+            "indices": indicesList, "classes": classes}
     return data
+
 
 @app.route("/test", methods=['POST'])
 def test():
@@ -121,8 +175,9 @@ def test():
     probslist = probs.tolist()
     indicesList = [i + 1 for i in indices.tolist()]
     # print(classes[str(indicesList[0])])
-    
-    z = list(zip([round(i,2) for i in probslist],[classes[str(i)] for i in indicesList]))
+
+    z = list(zip([round(i, 2) for i in probslist], [
+             classes[str(i)] for i in indicesList]))
     z.sort(reverse=True)
     return jsonify(z)
 
