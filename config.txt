@@ -6,7 +6,7 @@ CUDA_VISIBLE_DEVICES = "0"  # The current version only supports one GPU training
 TMPFILE = "/dev/shm/"
 FLASK_SECRET_KEY = "asjdfliajsdoivj$%^&*("
 set = "hk"
-model_name = "epoch70.pth"
+model_name = ""
 batch_size = 8
 vis_num = batch_size  # The number of visualized images in tensorboard
 eval_trainset = True  # Whether or not evaluate trainset
@@ -33,9 +33,9 @@ iou_threshs = [0.25, 0.25, 0.25]
 ratios = [[6, 6], [5, 7], [7, 5],
           [8, 8], [6, 10], [10, 6], [7, 9], [9, 7],
           [10, 10], [9, 11], [11, 9], [8, 12], [12, 8]]
-model_path = "./checkpoint/mmalhk/1629365659.061103"      # pth save path
-root = "../datasets/auto/1629365650.940147/mmal/"  # dataset path
-num_classes = 5
+model_path = "modelpath"      # pth save path
+root = "datasetpath"  # dataset path
+num_classes = num_classes_path
 window_nums = compute_window_nums(ratios, stride, input_size)
 indices_ndarrays = [np.arange(0, window_num).reshape(-1, 1)
                     for window_num in window_nums]

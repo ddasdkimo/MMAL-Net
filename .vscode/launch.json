@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "auto_train",
+            "type": "python",
+            "request": "launch",
+            "program": "auto_train.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "api",
             "type": "python",
             "request": "launch",
