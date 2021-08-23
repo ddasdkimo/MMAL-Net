@@ -1,5 +1,6 @@
 # coding=utf-8
 from glob import glob
+import zipfile
 from flask import Flask, escape, request, jsonify, make_response, render_template
 from flask_cors import CORS
 import torch
@@ -12,6 +13,7 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 import json
+from test import testmodel
 
 from werkzeug.datastructures import Range
 
@@ -72,6 +74,25 @@ def main():
     #     print(classes[str(int(indices[0])+1)])
 
 
+@app.route("/acctest", methods=['POST'])
+def acctest():
+    # 自動導出結果到 tensorboard 檔案上傳成功解壓縮成功 尚須確認 testmodel 導入機制
+    file = request.files.get("file")
+    filename = request.values.get('filename')
+    if not os.path.isdir("testlog/"):
+        os.mkdir("testlog/")
+
+    if not os.path.isdir("testlog/"+filename):
+        os.mkdir("testlog/"+filename)
+    file_path = "testlog/"+filename+"/file.zip"
+    file.save(file_path)
+
+    if zipfile.is_zipfile(file_path):
+        zf = zipfile.ZipFile(file_path, 'r')
+        zf.extractall("testlog/"+filename+"/file")
+    testmodel(num_classes, model_path+"/"+model_name, batch_size, set, filename)
+    return {'states': "Sucessfully", "msg": filename}, 200
+
 @app.route("/detects", methods=['POST'])
 def detects():
     global model, classes, filecount, device
@@ -83,6 +104,7 @@ def detects():
         fileName = str(filecount)
         filecount = filecount+1
         if not os.path.isdir(TMPFILE+"photo/"):
+
             os.mkdir(TMPFILE+"photo/")
         filename = TMPFILE+"photo/"+fileName+".jpg"
         img.save(filename)
@@ -119,6 +141,7 @@ def detects():
             print(classes[str(indicesList[0])])
             data.append({"probs": [round(i, 2) for i in probslist], "indices": indicesList,
                         "classes": classes, "name": namelist[i], "top": classes[str(indicesList[0])]})
+
     return jsonify(data)
 
 

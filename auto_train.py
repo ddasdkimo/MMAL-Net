@@ -4,7 +4,7 @@ import time
 import os
 import zipfile
 import toMMALByOne
-url = 'http://192.168.50.100:9991/downloadfile?filename=dataset/1629364395.044881/persion.zip'
+url = 'https://ftpweb.intemotech.com/Database/playcardmmaldata.zip'
 if not os.path.isdir("../datasets/auto/"):
     os.mkdir("../datasets/auto/")
 topath = "../datasets/auto/"+str(time.time())+"/"

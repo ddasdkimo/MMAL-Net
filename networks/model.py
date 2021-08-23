@@ -5,7 +5,7 @@ from networks import resnet
 from config import pretrain_path, coordinates_cat, iou_threshs, window_nums_sum, ratios, N_list
 import numpy as np
 from utils.AOLM import AOLM
-
+import cv2
 
 def nms(scores_np, proposalN, iou_threshs, coordinates):
     if not (type(scores_np).__module__ == 'numpy' and len(scores_np.shape) == 2 and scores_np.shape[1] == 1):
@@ -104,6 +104,10 @@ class MainNet(nn.Module):
             [x0, y0, x1, y1] = coordinates[i]
             local_imgs[i:i + 1] = F.interpolate(x[i:i + 1, :, x0:(x1+1), y0:(y1+1)], size=(448, 448),
                                                 mode='bilinear', align_corners=True)  # [N, 3, 224, 224]
+            # SCDA debug save image
+            # imgs = (local_imgs.permute([0,2,3,1])[...,[2,1,0]]*255).cpu().numpy()
+            # for i in range(len(imgs)):
+            #     cv2.imwrite(str(i)+"tmp.jpg",imgs[i])
         local_fm, local_embeddings, _ = self.pretrained_model(local_imgs.detach())  # [N, 2048]
         local_logits = self.rawcls_net(local_embeddings)  # [N, 200]
         if status == "inference":
