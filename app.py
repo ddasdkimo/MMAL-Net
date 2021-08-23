@@ -73,6 +73,9 @@ def main():
     #     probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
     #     print(classes[str(int(indices[0])+1)])
 
+@app.route("/ver", methods=['GET'])
+def ver():
+    return "v1.2"
 
 @app.route("/acctest", methods=['POST'])
 def acctest():

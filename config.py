@@ -34,7 +34,8 @@ ratios = [[6, 6], [5, 7], [7, 5],
           [8, 8], [6, 10], [10, 6], [7, 9], [9, 7],
           [10, 10], [9, 11], [11, 9], [8, 12], [12, 8]]
 model_path = "./checkpoint/mmalhk/1629365659.061103"      # pth save path
-root = "../datasets/auto/1629365650.940147/mmal/"  # dataset path
+# root = "../datasets/auto/1629365650.940147/mmal/"  # dataset path
+root = "./checkpoint/mmalhk/1629365659.061103"  # dataset path
 num_classes = 5
 window_nums = compute_window_nums(ratios, stride, input_size)
 indices_ndarrays = [np.arange(0, window_num).reshape(-1, 1)
