@@ -62,18 +62,12 @@ def main():
         model = model.cuda()  # 部署在GPU
         model.eval()
 
-    image = loadImage("datasets/RaiFit/images/29-2729859.jpg")
-    if CUDA_VISIBLE_DEVICES != 'CPU':
-        image = image.cuda()
-    with torch.no_grad():
-        probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
-        print(classes[str(int(indices[0])+1)])
-
 
 @app.route("/detect", methods=['POST'])
 def detect():
     global model, classes, filecount, device
     img = request.files.get('file')
+    starttime = time.time()
     fileName = str(filecount)
     filecount = filecount+1
     if not os.path.isdir(TMPFILE+"photo/"):
@@ -92,8 +86,9 @@ def detect():
     except OSError as e:
         print(e)
     probslist = probs.tolist()
-    indicesList = [i + 1 for i in indices.tolist()]
-    print(classes[str(indicesList[0])])
+    indicesList = [i  for i in indices.tolist()]
+    print("使用時間:"+str(time.time() - starttime))
+    print(classes[str(indicesList[0]+1)])
     data = {"probs":[round(i,2) for i in probslist],"indices":indicesList,"classes":classes}
     return data
 

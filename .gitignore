@@ -5,7 +5,7 @@ models/*.pth
 *.DS_Store
 *__init__.py
 *__pycache__
-
+*.jpg
 /checkpoint
 datasets/RaiFit
 datasets/CUB_200_2011

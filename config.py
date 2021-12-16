@@ -5,11 +5,11 @@ import numpy as np
 CUDA_VISIBLE_DEVICES = '0'  # The current version only supports one GPU training
 # CUDA_VISIBLE_DEVICES = 'CPU'
 TMPFILE = "/dev/shm/"
-FLASK_SECRET_KEY = "asjdfliajsdoivj$%^&*("
-set = 'RaiFit'  # Different dataset with different
-model_name = 'epoch19.pth'
-# model_name = ''
-batch_size = 10
+FLASK_SECRET_KEY = "qqqasjdfliajsdoivj$%^&*("
+set = 'mmal_gender'  # Different dataset with different
+# model_name = 'epoch19.pth'
+model_name = 'epoch10.pth'
+batch_size = 5
 vis_num = batch_size  # The number of visualized images in tensorboard
 eval_trainset = True  # Whether or not evaluate trainset
 save_interval = 1
@@ -60,7 +60,10 @@ else:
         model_path = './checkpoint/RaiFit'      # pth save path
         root = './datasets/RaiFit'  # dataset path
         num_classes = 31
-
+    elif set == 'mmal_gender':
+        model_path = './checkpoint/mmal_gender'      # pth save path
+        root = './datasets/mmal_gender'  # dataset path
+        num_classes = 2
 
 '''indice2coordinates'''
 window_nums = compute_window_nums(ratios, stride, input_size)
