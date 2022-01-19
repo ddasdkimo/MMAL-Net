@@ -61,7 +61,7 @@ def main():
     if CUDA_VISIBLE_DEVICES != 'CPU':
         model = model.cuda()  # 部署在GPU
         model.eval()
-
+    
 
 @app.route("/detect", methods=['POST'])
 def detect():

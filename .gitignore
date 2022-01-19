@@ -13,3 +13,5 @@ datasets/Stanford_Cars
 datasets/RaiFit42
 datasets/FGVC-aircraft
 datasets/RaiFit31+42
+*.zip
+datasets/*
