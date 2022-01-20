@@ -11,7 +11,8 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "trainapi.py",
-                "FLASK_ENV": "development"
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0"
             },
             "args": [
                 "run",
@@ -28,10 +29,12 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "app.py",
-                "FLASK_ENV": "development"
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0"
             },
             "args": [
                 "run",
+                
                 "--no-debugger",
                 "--host",
                 "0.0.0.0"

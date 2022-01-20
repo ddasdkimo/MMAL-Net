@@ -4,6 +4,7 @@ import os
 from PIL import Image
 from torchvision import transforms
 import torch
+from torchvision.transforms import InterpolationMode
 
 class CUB():
     def __init__(self, input_size, root, is_train=True, data_len=None):
@@ -57,7 +58,7 @@ class CUB():
             height_scale = self.input_size / height
             width_scale = self.input_size / width
 
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
             img = transforms.RandomHorizontalFlip()(img)
             img = transforms.ColorJitter(brightness=0.2, contrast=0.2)(img)
 
@@ -75,7 +76,7 @@ class CUB():
             height_scale = self.input_size / height
             width_scale = self.input_size / width
 
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
             # img = transforms.Resize((688, 688), Image.BILINEAR)(img)
             # img = transforms.CenterCrop(448)(img)
             img = transforms.ToTensor()(img)
@@ -117,7 +118,7 @@ class STANFORD_CAR():
                 img = np.stack([img] * 3, 2)
             img = Image.fromarray(img, mode='RGB')
 
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
             # img = transforms.RandomResizedCrop(size=self.input_size,scale=(0.4, 0.75),ratio=(0.5,1.5))(img)
             # img = transforms.RandomCrop(self.input_size)(img)
             img = transforms.RandomHorizontalFlip()(img)
@@ -131,7 +132,7 @@ class STANFORD_CAR():
             if len(img.shape) == 2:
                 img = np.stack([img] * 3, 2)
             img = Image.fromarray(img, mode='RGB')
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
             # img = transforms.CenterCrop(self.input_size)(img)
             img = transforms.ToTensor()(img)
             img = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])(img)
@@ -170,7 +171,7 @@ class FGVC_aircraft():
                 img = np.stack([img] * 3, 2)
             img = Image.fromarray(img, mode='RGB')
 
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
             # img = transforms.RandomResizedCrop(size=self.input_size,scale=(0.4, 0.75),ratio=(0.5,1.5))(img)
             # img = transforms.RandomCrop(self.input_size)(img)
             img = transforms.RandomHorizontalFlip()(img)
@@ -184,7 +185,7 @@ class FGVC_aircraft():
             if len(img.shape) == 2:
                 img = np.stack([img] * 3, 2)
             img = Image.fromarray(img, mode='RGB')
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
             # img = transforms.CenterCrop(self.input_size)(img)
             img = transforms.ToTensor()(img)
             img = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])(img)
@@ -214,8 +215,10 @@ class Rai_fit():
             if len(img.shape) == 2:
                 img = np.stack([img] * 3, 2)
             img = Image.fromarray(img, mode='RGB')
-
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            
+            
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
+            # img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
             # img = transforms.RandomResizedCrop(size=self.input_size,scale=(0.4, 0.75),ratio=(0.5,1.5))(img)
             # img = transforms.RandomCrop(self.input_size)(img)
             img = transforms.RandomHorizontalFlip()(img)
@@ -229,7 +232,8 @@ class Rai_fit():
             if len(img.shape) == 2:
                 img = np.stack([img] * 3, 2)
             img = Image.fromarray(img, mode='RGB')
-            img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
+            img = transforms.Resize((self.input_size, self.input_size), InterpolationMode.BILINEAR)(img)
+            # img = transforms.Resize((self.input_size, self.input_size), Image.BILINEAR)(img)
             # img = transforms.CenterCrop(self.input_size)(img)
             img = transforms.ToTensor()(img)
             img = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])(img)

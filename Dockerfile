@@ -23,16 +23,17 @@ WORKDIR /app
 ADD ./ .
 
 
-# docker build -t raidavid/mmfashion:hkruning .
+# docker build -t raidavid/rai_mmal_train:220119 .
 
-# docker push raidavid/mmfashion:hkruning
+# docker push raidavid/rai_mmal_train:220119
 
 # docker run --gpus all -d \
 # -it \
-# --name mmal \
+# --name mmal_train \
 # -p 8013:5000 \
 # --restart=always \
-# raidavid/mmfashion:hkruning bash -c "flask run --host 0.0.0.0"
+# raidavid/rai_mmal_train:220119 \
+# bash -c "export FLASK_APP=trainapi && flask run --host 0.0.0.0"
 
 # docker exec -it mmal /bin/bash
-# docker stop mmal && docker rm mmal
+# docker stop mmal_train && docker rm mmal_train

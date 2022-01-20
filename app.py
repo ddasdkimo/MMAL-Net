@@ -21,7 +21,7 @@ from utils.read_dataset import read_dataset
 from utils.auto_laod_resume import auto_load_resume
 from networks.model import MainNet
 import os
-
+from torchvision.transforms import InterpolationMode
 app = Flask(__name__)
 CORS(app)
 app.config["DEBUG"] = True
@@ -35,7 +35,7 @@ def loadImage(path):
     if len(img.shape) == 2:
         img = np.stack([img] * 3, 2)
     img = Image.fromarray(img, mode='RGB')
-    img = transforms.Resize((input_size, input_size), Image.BILINEAR)(img)
+    img = transforms.Resize((input_size, input_size), InterpolationMode.BILINEAR)(img)
     img = transforms.RandomHorizontalFlip()(img)
     img = transforms.ColorJitter(brightness=0.2, contrast=0.2)(img)
     img = transforms.ToTensor()(img)

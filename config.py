@@ -6,15 +6,15 @@ CUDA_VISIBLE_DEVICES = '0'  # The current version only supports one GPU training
 # CUDA_VISIBLE_DEVICES = 'CPU'
 TMPFILE = "/dev/shm/"
 FLASK_SECRET_KEY = "qqqasjdfliajsdoivj$%^&*("
-set = 'mmal_gender'  # Different dataset with different
+set = 'type'  # Different dataset with different
 # model_name = 'epoch19.pth'
-model_name = 'epoch10.pth'
+model_name = ''
 batch_size = 5
 vis_num = batch_size  # The number of visualized images in tensorboard
 eval_trainset = True  # Whether or not evaluate trainset
 save_interval = 1
 max_checkpoint_num = 200
-end_epoch = 200
+end_epoch = int("5")
 init_lr = 0.001
 lr_milestones = [60, 100]
 lr_decay_rate = 0.1
@@ -64,7 +64,10 @@ else:
         model_path = './checkpoint/mmal_gender'      # pth save path
         root = './datasets/mmal_gender'  # dataset path
         num_classes = 2
-
+    elif set == 'type':
+        model_path = 'checkpoint/rai_test/type'      # pth save path
+        root = 'datasets/rai_test/type'  # dataset path
+        num_classes = int('6')
 '''indice2coordinates'''
 window_nums = compute_window_nums(ratios, stride, input_size)
 indices_ndarrays = [np.arange(0,window_num).reshape(-1,1) for window_num in window_nums]

@@ -49,15 +49,7 @@ def read_dataset(input_size, batch_size, root, set):
         testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                                  shuffle=False, num_workers=8, drop_last=False)
     else:
-        # print('Please choose supported dataset')
-        # os._exit()
-        print('Loading Aircraft trainset')
-        trainset = dataset.Rai_fit(input_size=input_size, root=root, is_train=True)
-        trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                                  shuffle=True, num_workers=8, drop_last=False)
-        print('Loading Aircraft testset')
-        testset = dataset.Rai_fit(input_size=input_size, root=root, is_train=False)
-        testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                                 shuffle=False, num_workers=8, drop_last=False)
+        print('Please choose supported dataset')
+        os._exit()
 
     return trainloader, testloader
