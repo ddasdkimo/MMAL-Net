@@ -6,6 +6,7 @@ RUN apt-get install -y git-all
 RUN cd /
 RUN git clone https://github.com/ddasdkimo/MMAL-Net.git
 RUN pip install flask Flask-Cors imageio tensorboardX opencv-python scikit-image
+
 # 針對3090支援問題修改為預覽版
 RUN pip uninstall -y torch torchvision
 RUN pip install --pre torch torchvision torchaudio -f https://download.pytorch.org/whl/nightly/cu111/torch_nightly.html
@@ -17,15 +18,16 @@ RUN pip install --pre torch torchvision torchaudio -f https://download.pytorch.o
 # RUN cd /workspace/MMAL-Net && wget https://ftpweb.intemotech.com/MMALRuning/33/config.py -O config.py
 # RUN cd /workspace/MMAL-Net/datasets/mmal_0715_33/ && wget https://ftpweb.intemotech.com/MMALRuning/33/class.txt
 # WORKDIR /workspace/MMAL-Net
+RUN pip install tensorboard
 # 複製專案
-RUN mkdir -p /app
-WORKDIR /app
+RUN mkdir -p /home/ubuntu/MMAL-Net
+WORKDIR /home/ubuntu/MMAL-Net
 ADD ./ .
 
 
-# docker build -t raidavid/rai_mmal_train:220119 .
+# docker build -t raidavid/rai_mmal_train:220120 .
 
-# docker push raidavid/rai_mmal_train:220119
+# docker push raidavid/rai_mmal_train:220120
 
 # docker run --gpus all -d \
 # -it \

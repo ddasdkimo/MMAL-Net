@@ -1,4 +1,5 @@
 import os
+os.environ['MKL_THREADING_LAYER'] = 'GNU'
 import time
 import cv2
 import threading
@@ -22,7 +23,7 @@ class ModelTrainData():
     def start(self,name):
         self.modelname = name
         p = subprocess.Popen(
-            'cd /home/ubuntu/MMAL-Net ; /usr/bin/python3 train.py', shell=True, stdout=subprocess.PIPE)
+            'cd /home/ubuntu/MMAL-Net ; /opt/conda/bin/python train.py', shell=True, stdout=subprocess.PIPE)
         p.returncode
         p.poll()
 
