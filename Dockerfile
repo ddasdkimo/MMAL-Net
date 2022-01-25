@@ -26,7 +26,6 @@ ADD ./ .
 
 
 # docker build -t raidavid/rai_mmal_train:220120 .
-
 # docker push raidavid/rai_mmal_train:220120
 
 # docker run --gpus all -d \
@@ -39,3 +38,19 @@ ADD ./ .
 
 # docker exec -it mmal /bin/bash
 # docker stop mmal_train && docker rm mmal_train
+
+
+# docker build -t raidavid/rai_mmal_inference:220125 .
+# docker push raidavid/rai_mmal_inference:220125
+
+# docker run --gpus all -d \
+# -it \
+# --name mmal_inference \
+# -p 8014:5000 \
+# -v /home/ubuntu/MMAL-Net/:/home/ubuntu/MMAL-Net/ \
+# -v /media/ubuntu/2t/auto/mmal/checkpoint:/checkpoint \
+# --restart=always \
+# raidavid/rai_mmal_inference:220125
+
+
+# docker stop mmal_inference && docker rm mmal_inference
