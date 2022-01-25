@@ -7,6 +7,7 @@ import requests
 import zipfile
 import json
 import subprocess
+import shutil
 
 
 class ModelTrainData():
@@ -52,6 +53,7 @@ class CreateTrainData(threading.Thread):
 
     def __init__(self, data):
         threading.Thread.__init__(self)
+        self.mModelTrainDatalist = []
         self.data = data
 
     def message(self):
@@ -77,8 +79,14 @@ class CreateTrainData(threading.Thread):
 
             projectname = data.get('projectName')
             epoch = data.get('epoch')
+            # epoch = 5
             # project_url = 'checkpoint/'+projectname
             project_model_path = 'checkpoint/'+projectname
+            if os.path.exists(project_model_path):
+                try:
+                    shutil.rmtree(project_model_path)
+                except OSError as e:
+                    print(e)
             project_root = 'datasets/'+projectname
 
             if not os.path.isdir(project_root):

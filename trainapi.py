@@ -65,4 +65,5 @@ def getTrainDataList():
     listdata = list()
     for item in trainDataList:
         listdata.append(item.message())
+    listdata.reverse()
     return  listdata
