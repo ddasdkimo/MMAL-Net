@@ -12,8 +12,9 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 import json
+from rai_db import RaiDB
 
-from config import num_classes, model_name, model_path, lr_milestones, lr_decay_rate, input_size, \
+from config_inf import num_classes, model_name, model_path, lr_milestones, lr_decay_rate, input_size, \
     root, end_epoch, save_interval, init_lr, batch_size, CUDA_VISIBLE_DEVICES, weight_decay, \
     proposalN, set, channels, FLASK_SECRET_KEY, TMPFILE
 from utils.train_model import train
@@ -28,7 +29,7 @@ app.config["DEBUG"] = True
 app.config['SECRET_KEY'] = FLASK_SECRET_KEY
 os.environ['CUDA_VISIBLE_DEVICES'] = CUDA_VISIBLE_DEVICES
 filecount = 0
-
+logdb = RaiDB()
 
 def loadImage(path):
     img = imageio.imread(path)
@@ -91,6 +92,41 @@ def detect():
     print(classes[str(indicesList[0]+1)])
     data = {"probs":[round(i,2) for i in probslist],"indices":indicesList,"classes":classes}
     return data
+@app.route("/detectv1", methods=['POST'])
+def detectv1():
+    global model, classes, filecount, device
+    img = request.files.get('file')
+    userid = request.values.get('userid')
+    starttime = time.time()
+    fileName = str(filecount)
+    filecount = filecount+1
+    if not os.path.isdir(TMPFILE+"photo/"):
+        os.mkdir(TMPFILE+"photo/")
+
+    filename = TMPFILE+"photo/"+fileName+".jpg"
+    img.save(filename)
+    image = loadImage(filename)
+    if CUDA_VISIBLE_DEVICES != 'CPU':
+        image = image.cuda()
+    with torch.no_grad():
+        probs, indices = model(image, 0, 0, status='inference', DEVICE=device)
+        # print(classes[str(int(indices[0])+1)])
+    try:
+        os.remove(filename)
+    except OSError as e:
+        print(e)
+    probslist = probs.tolist()
+    indicesList = [i  for i in indices.tolist()]
+    print("使用時間:"+str(time.time() - starttime))
+    print(classes[str(indicesList[0]+1)])
+    datalist = []
+    for i in indicesList:
+        logdb.addType(userid,classes[str(i+1)],"{:.4f}".format(probslist[i]))
+        datalist.append({"type":classes[str(i+1)],"probs":probslist[i]})
+        
+    
+    # data = {"probs":[round(i,2) for i in probslist],"indices":indicesList,"classes":classes}
+    return jsonify(datalist)
 
 @app.route("/test", methods=['POST'])
 def test():

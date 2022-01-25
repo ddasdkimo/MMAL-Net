@@ -19,6 +19,7 @@ RUN pip install --pre torch torchvision torchaudio -f https://download.pytorch.o
 # RUN cd /workspace/MMAL-Net/datasets/mmal_0715_33/ && wget https://ftpweb.intemotech.com/MMALRuning/33/class.txt
 # WORKDIR /workspace/MMAL-Net
 RUN pip install tensorboard
+RUN pip install psycopg2
 # 複製專案
 RUN mkdir -p /home/ubuntu/MMAL-Net
 WORKDIR /home/ubuntu/MMAL-Net
