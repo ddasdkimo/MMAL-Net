@@ -19,7 +19,7 @@ RUN pip install --pre torch torchvision torchaudio -f https://download.pytorch.o
 # RUN cd /workspace/MMAL-Net/datasets/mmal_0715_33/ && wget https://ftpweb.intemotech.com/MMALRuning/33/class.txt
 # WORKDIR /workspace/MMAL-Net
 RUN pip install tensorboard
-RUN pip install psycopg2
+RUN pip install psycopg2-binary
 # 複製專案
 RUN mkdir -p /home/ubuntu/MMAL-Net
 WORKDIR /home/ubuntu/MMAL-Net
@@ -47,11 +47,10 @@ ADD ./ .
 # docker run --gpus all -d \
 # -it \
 # --name mmal_inference \
+# --network=hkNetwork --ip 193.168.44.179 \
 # -p 8014:5000 \
-# -v /home/ubuntu/MMAL-Net/:/home/ubuntu/MMAL-Net/ \
-# -v /media/ubuntu/2t/auto/mmal/checkpoint:/checkpoint \
 # --restart=always \
-# raidavid/rai_mmal_inference:220125
-
+# raidavid/rai_mmal_inference:220125 \
+# bash -c "export FLASK_APP=app && flask run --host 0.0.0.0"
 
 # docker stop mmal_inference && docker rm mmal_inference
